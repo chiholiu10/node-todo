@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const mongodb = require('mongodb');
 
 mongoose.connect('mongodb://localhost/todo');
 
@@ -44,14 +45,15 @@ app.post('/newTodo', function(req, res) {
     res.redirect("/");
 });
 
-app.get('/:id', (req, res) => {
+app.get('/delete/:id', (req, res) => {
     const id = req.params.id;
     
-    db.collection('todo').remove({ _id: mongodb.ObjectID(id)}, (err, result) => {
+    Todo.remove({ _id: mongodb.ObjectID(id)}, (err, result) => {
         if(err) return console.log(err)
         console.log(req.params.id);
-        res.redirect('/');
     });
+
+    res.redirect('/');
 });
 
 app.get('*', function(req, res) {
